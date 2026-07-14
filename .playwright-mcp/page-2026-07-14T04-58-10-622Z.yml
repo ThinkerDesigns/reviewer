@@ -1,0 +1,67 @@
+- generic [active] [ref=e1]:
+  - heading "SWE Internship Resume Reviewer" [level=1] [ref=e2]
+  - paragraph [ref=e3]: Paste your resume or upload a file. Get a rigorous, recruiter-style score.
+  - generic [ref=e4]:
+    - generic [ref=e5]: Resume (paste text)
+    - textbox "Resume (paste text)" [ref=e6]:
+      - /placeholder: Paste your resume content here...
+  - generic [ref=e7]:
+    - generic [ref=e8]: Or upload a file
+    - paragraph [ref=e10] [cursor=pointer]: Click to browse or drag & drop — PDF, DOCX, TXT
+    - paragraph [ref=e20]: ✓ Resume.pdf
+  - generic [ref=e11]:
+    - generic [ref=e12]: Job Description (optional)
+    - textbox "Job Description (optional)" [ref=e13]:
+      - /placeholder: Paste the job description here to get keyword-gap feedback...
+  - generic [ref=e14]:
+    - generic [ref=e15]: Referral
+    - generic [ref=e16]:
+      - switch [ref=e17] [cursor=pointer]
+      - generic [ref=e18]: No referral
+  - button "Review Resume" [ref=e19] [cursor=pointer]
+  - generic [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - generic [ref=e26]: "82"
+        - generic [ref=e27]: / 100
+      - generic [ref=e28]:
+        - generic [ref=e30]:
+          - generic [ref=e31]: Impact & Quantification
+          - generic [ref=e32]: 22 / 25
+        - generic [ref=e36]:
+          - generic [ref=e37]: Technical Depth & Relevance
+          - generic [ref=e38]: 18 / 20
+        - generic [ref=e42]:
+          - generic [ref=e43]: Relevant Experience
+          - generic [ref=e44]: 13 / 15
+        - generic [ref=e48]:
+          - generic [ref=e49]: Clarity & Concision
+          - generic [ref=e50]: 6 / 10
+        - generic [ref=e54]:
+          - generic [ref=e55]: Formatting & ATS-Friendliness
+          - generic [ref=e56]: 7 / 10
+        - generic [ref=e60]:
+          - generic [ref=e61]: Skills Section Accuracy
+          - generic [ref=e62]: 8 / 10
+        - generic [ref=e66]:
+          - generic [ref=e67]: Education Presentation
+          - generic [ref=e68]: 4 / 5
+        - generic [ref=e72]:
+          - generic [ref=e73]: Overall Polish / Red Flags
+          - generic [ref=e74]: 3 / 5
+      - generic [ref=e77]:
+        - strong [ref=e78]: Interview Likelihood
+        - generic [ref=e79]:
+          - text: "Without referral:"
+          - strong [ref=e80]: 30%
+          - text: "With referral:"
+          - strong [ref=e81]: 50%
+          - paragraph [ref=e82]: The candidate demonstrates strong technical depth and relevant experience, but formatting errors, ambiguous dates, and an unclear graduation year lower confidence without a referral. A referral could mitigate these red flags.
+    - generic [ref=e83]:
+      - generic [ref=e84]: Top Fixes
+      - list [ref=e85]:
+        - listitem [ref=e86]: Clarify and correct the graduation year to a realistic date.
+        - listitem [ref=e87]: Adjust all experience dates so they reflect past roles, not future ones.
+        - listitem [ref=e88]: Fix typographical errors such as "pe r reques t" and "Data r ola".
+        - listitem [ref=e89]: Standardize section headings and bullet point formatting for ATS readability.
+        - listitem [ref=e90]: Add or refine metrics for research projects to highlight impact.

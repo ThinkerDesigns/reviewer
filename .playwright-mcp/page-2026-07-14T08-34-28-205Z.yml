@@ -1,0 +1,31 @@
+- generic [ref=f2e1]:
+  - heading "SWE Internship Resume Reviewer" [level=1] [ref=f2e2]
+  - paragraph [ref=f2e3]: Paste your resume or upload a file. Get a rigorous, recruiter-style score.
+  - generic [ref=f2e4]:
+    - generic [ref=f2e5]: Resume (paste text)
+    - textbox "Resume (paste text)" [ref=f2e6]:
+      - /placeholder: Paste your resume content here...
+  - generic [ref=f2e7]:
+    - generic [ref=f2e8]: Or upload a file
+    - paragraph [ref=f2e10] [cursor=pointer]: Click to browse or drag & drop — PDF, DOCX, TXT
+    - paragraph
+  - generic [ref=f2e11]:
+    - generic [ref=f2e12]: Job Description (optional)
+    - textbox "Job Description (optional)" [ref=f2e13]:
+      - /placeholder: Paste the job description here to get keyword-gap feedback...
+  - generic [ref=f2e14]:
+    - generic [ref=f2e15]: Referral
+    - generic [ref=f2e16]:
+      - switch [ref=f2e17] [cursor=pointer]
+      - generic [ref=f2e18]: No referral
+  - generic [ref=f2e19]:
+    - generic [ref=f2e20]: Backend Provider
+    - combobox "Backend Provider" [ref=f2e21] [cursor=pointer]:
+      - option "Ollama (local)" [selected]
+      - option "Anthropic API"
+      - option "OpenAI API (ChatGPT)"
+    - paragraph [ref=f2e23]:
+      - text: "Runs locally — no API key needed. Pull a model first:"
+      - code [ref=f2e24]: ollama pull <model>
+  - button "Review Resume" [active] [ref=f2e25] [cursor=pointer]
+  - generic [ref=f2e26]: Please paste resume text or upload a file.

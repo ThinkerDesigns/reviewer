@@ -1,0 +1,23 @@
+- generic [active] [ref=f1e1]:
+  - heading "SWE Internship Resume Reviewer" [level=1] [ref=f1e2]
+  - paragraph [ref=f1e3]: Paste your resume or upload a file. Get a rigorous, recruiter-style score.
+  - generic [ref=f1e4]:
+    - generic [ref=f1e5]: Resume (paste text)
+    - textbox "Resume (paste text)" [ref=f1e6]:
+      - /placeholder: Paste your resume content here...
+  - generic [ref=f1e7]:
+    - generic [ref=f1e8]: Or upload a file
+    - paragraph [ref=f1e10] [cursor=pointer]: Click to browse or drag & drop — PDF, DOCX, TXT
+    - paragraph
+  - generic [ref=f1e11]:
+    - generic [ref=f1e12]: Job Description (optional)
+    - textbox "Job Description (optional)" [ref=f1e13]:
+      - /placeholder: Paste the job description here to get keyword-gap feedback...
+  - generic [ref=f1e14]:
+    - generic [ref=f1e15]: Referral
+    - generic [ref=f1e16]:
+      - switch [ref=f1e17] [cursor=pointer]
+      - generic [ref=f1e18]: No referral
+  - button "Review Resume" [ref=f1e19] [cursor=pointer]
+  - text: Analyzing resume…
+  - paragraph

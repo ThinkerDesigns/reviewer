@@ -1,0 +1,44 @@
+- generic [active] [ref=f1e1]:
+  - heading "SWE Internship Resume Reviewer" [level=1] [ref=f1e2]
+  - paragraph [ref=f1e3]: Paste your resume or upload a file. Get a rigorous, recruiter-style score.
+  - generic [ref=f1e4]:
+    - generic [ref=f1e5]: Resume (paste text)
+    - textbox "Resume (paste text)" [ref=f1e6]:
+      - /placeholder: Paste your resume content here...
+  - generic [ref=f1e7]:
+    - generic [ref=f1e8]: Or upload a file
+    - paragraph [ref=f1e10] [cursor=pointer]: Click to browse or drag & drop — PDF, DOCX, TXT
+    - paragraph [ref=f1e21]: ✓ Resume.pdf
+  - generic [ref=f1e11]:
+    - generic [ref=f1e12]: Job Description (optional)
+    - textbox "Job Description (optional)" [ref=f1e13]:
+      - /placeholder: Paste the job description here to get keyword-gap feedback...
+  - generic [ref=f1e14]:
+    - generic [ref=f1e15]: Referral
+    - generic [ref=f1e16]:
+      - switch [ref=f1e17] [cursor=pointer]
+      - generic [ref=f1e18]: No referral
+  - button "Review Resume" [ref=f1e19] [cursor=pointer]
+  - text: Analyzing resume…
+  - paragraph
+  - generic [ref=f1e23]:
+    - generic [ref=f1e24]:
+      - generic [ref=f1e25]:
+        - generic [ref=f1e26]: "61"
+        - generic [ref=f1e27]: / 100
+      - generic [ref=f1e28]:
+        - strong [ref=f1e29]: Interview Likelihood
+        - generic [ref=f1e30]:
+          - text: "Without referral:"
+          - strong [ref=f1e31]: 15%
+          - text: "With referral:"
+          - strong [ref=f1e32]: 35%
+          - paragraph [ref=f1e33]: The résumé demonstrates solid technical experience and quantifiable achievements, but the future-dated work history, formatting errors, and unclear graduation year significantly lower confidence in its authenticity. A referral would mitigate some concerns but still not overcome the red flags.
+    - generic [ref=f1e34]:
+      - generic [ref=f1e35]: Top Fixes
+      - list [ref=f1e36]:
+        - listitem [ref=f1e37]: Correct all employment and education dates to reflect actual past or current periods.
+        - listitem [ref=f1e38]: "Clean up formatting: remove stray hyphens, standardize bullet points, and ensure consistent line spacing."
+        - listitem [ref=f1e39]: Focus the skills section on relevant tech for SWE internships; reduce unrelated or redundant entries.
+        - listitem [ref=f1e40]: Quantify every achievement consistently and avoid vague statements (e.g., "increased refund outcomes").
+        - listitem [ref=f1e41]: Provide a clear graduation year and include expected/actual completion date.

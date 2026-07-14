@@ -1,0 +1,5 @@
+[   45368ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8080/index.html:0
+[   78608ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8080/index.html:0
+[  114173ms] [LOG] Warning: TT: undefined function: 32 @ https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js:21
+[  128705ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:11434/api/chat:0
+[  338224ms] [LOG] Warning: TT: undefined function: 32 @ https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js:21

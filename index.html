@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SWE Internship Resume Reviewer</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafafa; --surface: #fff; --border: #e2e2e2;
+    --text: #1a1a1a; --muted: #6b7280; --accent: #4f46e5;
+    --accent-light: #eef2ff; --danger: #dc2626; --success: #16a34a;
+    --bar-bg: #e5e7eb; --radius: 8px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    padding: 2rem 1rem; max-width: 900px; margin: 0 auto;
+  }
+
+  h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: .25rem; }
+  .subtitle { color: var(--muted); font-size: .95rem; margin-bottom: 2rem; }
+
+  section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.25rem; }
+  label { display: block; font-weight: 600; margin-bottom: .4rem; font-size: .9rem; }
+  .hint { color: var(--muted); font-size: .82rem; margin-bottom: .5rem; }
+
+  textarea {
+    width: 100%; min-height: 160px; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: .75rem; font: inherit; font-size: .9rem; resize: vertical;
+  }
+  textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+
+  .upload-zone {
+    border: 2px dashed var(--border); border-radius: var(--radius); padding: 1.5rem;
+    text-align: center; cursor: pointer; transition: border-color .15s, background .15s;
+  }
+  .upload-zone:hover, .upload-zone.drag-over { border-color: var(--accent); background: var(--accent-light); }
+  .upload-zone input { display: none; }
+  .upload-zone p { color: var(--muted); font-size: .9rem; }
+  .upload-zone p span { color: var(--accent); text-decoration: underline; }
+
+  .toggle-row { display: flex; align-items: center; gap: .75rem; margin-top: .5rem; }
+  .toggle {
+    position: relative; width: 44px; height: 24px; background: var(--bar-bg); border-radius: 12px;
+    cursor: pointer; transition: background .2s; flex-shrink: 0;
+  }
+  .toggle.on { background: var(--accent); }
+  .toggle::after {
+    content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px;
+    background: #fff; border-radius: 50%; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.15);
+  }
+  .toggle.on::after { transform: translateX(20px); }
+  .toggle-label { font-size: .9rem; }
+
+  button.submit {
+    width: 100%; padding: .85rem; background: var(--accent); color: #fff; border: none;
+    border-radius: var(--radius); font-size: 1rem; font-weight: 600; cursor: pointer;
+    transition: opacity .15s; margin-bottom: 1.25rem;
+  }
+  button.submit:hover { opacity: .9; }
+  button.submit:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* Results */
+  #results { display: none; }
+  #results.visible { display: block; }
+
+  .score-header { display: flex; align-items: baseline; gap: .75rem; margin-bottom: 1.25rem; }
+  .score-big { font-size: 3rem; font-weight: 800; color: var(--accent); }
+  .score-max { font-size: 1rem; color: var(--muted); }
+  .likelihood-box { margin-top: 1.25rem; padding: 1rem; background: var(--accent-light); border-radius: var(--radius); font-size: .95rem; }
+  .likelihood-box strong { color: var(--accent); font-size: 1.2rem; display: block; margin-bottom: .25rem; }
+
+  .bar-row { margin-bottom: .85rem; }
+  .bar-label { display: flex; justify-content: space-between; font-size: .85rem; margin-bottom: .2rem; }
+  .bar-track { height: 10px; background: var(--bar-bg); border-radius: 5px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 5px; transition: width .5s ease; min-width: 0; }
+
+  .fix-list { list-style: none; counter-reset: fix; }
+  .fix-list li { counter-increment: fix; padding: .6rem .6rem .6rem 2.4rem; position: relative; font-size: .9rem; border-bottom: 1px solid var(--border); }
+  .fix-list li:last-child { border-bottom: none; }
+  .fix-list li::before {
+    content: counter(fix); position: absolute; left: .45rem; top: .6rem; width: 1.5rem; height: 1.5rem;
+    background: var(--accent); color: #fff; border-radius: 50%; font-size: .75rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .tag-list { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .25rem; }
+  .tag { background: #fef2f2; color: var(--danger); padding: .15rem .55rem; border-radius: 99px; font-size: .8rem; font-weight: 500; }
+
+  .reasoning { color: var(--muted); font-size: .87rem; margin-top: .4rem; font-style: italic; }
+
+  .loading { text-align: center; padding: 2rem; color: var(--muted); display: none; }
+  .loading.visible { display: block; }
+  .spinner {
+    width: 32px; height: 32px; border: 3px solid var(--bar-bg); border-top-color: var(--accent);
+    border-radius: 50%; animation: spin .6s linear infinite; margin: 0 auto .75rem;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-box { background: #fef2f2; color: var(--danger); padding: .75rem 1rem; border-radius: var(--radius); font-size: .88rem; margin-bottom: 1.25rem; display: none; }
+  .error-box.visible { display: block; }
+
+  select {
+    width: 100%; padding: .6rem .75rem; border: 1px solid var(--border); border-radius: var(--radius);
+    font: inherit; font-size: .9rem; background: #fff; cursor: pointer;
+  }
+  select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+
+  input[type="password"] {
+    width: 100%; padding: .6rem .75rem; border: 1px solid var(--border); border-radius: var(--radius);
+    font: inherit; font-size: .9rem; margin-top: .4rem; box-sizing: border-box;
+  }
+  input[type="password"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+
+  .file-name { font-size: .82rem; color: var(--accent); margin-top: .35rem; word-break: break-all; }
+
+  @media (max-width: 600px) {
+    body { padding: 1rem .75rem; }
+    .score-big { font-size: 2.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>SWE Internship Resume Reviewer</h1>
+<p class="subtitle">Paste your resume or upload a file. Get a rigorous, recruiter-style score.</p>
+
+<section>
+  <label for="resume-paste">Resume (paste text)</label>
+  <textarea id="resume-paste" placeholder="Paste your resume content here..."></textarea>
+</section>
+
+<section>
+  <label>Or upload a file</label>
+  <div class="upload-zone" id="drop-zone">
+    <input type="file" id="file-input" accept=".pdf,.docx,.txt,.text">
+    <p><span>Click to browse</span> or drag &amp; drop — PDF, DOCX, TXT</p>
+  </div>
+  <p class="file-name" id="file-name"></p>
+</section>
+
+<section>
+  <label for="jd-text">Job Description (optional)</label>
+  <textarea id="jd-text" placeholder="Paste the job description here to get keyword-gap feedback..." style="min-height:100px"></textarea>
+</section>
+
+<section>
+  <label>Referral</label>
+  <div class="toggle-row">
+    <div class="toggle" id="referral-toggle" role="switch" aria-checked="false" tabindex="0"></div>
+    <span class="toggle-label" id="referral-label">No referral</span>
+  </div>
+</section>
+
+	<section id="provider-section">
+	  <label for="provider-select">Backend Provider</label>
+	  <select id="provider-select">
+	    <option value="ollama">Ollama (local)</option>
+	    <option value="anthropic">Anthropic API</option>
+	    <option value="openai">OpenAI API (ChatGPT)</option>
+	  </select>
+	  <div id="provider-config" style="margin-top:.6rem"></div>
+	</section>
+
+<button class="submit" id="submit-btn">Review Resume</button>
+
+<div class="loading" id="loading"><div class="spinner"></div>Analyzing resume…</div>
+<div class="error-box" id="error-box"></div>
+
+<div id="results">
+  <section>
+    <div class="score-header">
+      <span class="score-big" id="overall-score">—</span>
+      <span class="score-max">/ 100</span>
+    </div>
+
+    <div id="sub-bars"></div>
+
+    <div class="likelihood-box">
+      <strong>Interview Likelihood</strong>
+      <div id="likelihood-content"></div>
+    </div>
+  </section>
+
+  <section id="jd-section" style="display:none">
+    <label>JD Gap Analysis</label>
+    <div id="jd-content"></div>
+  </section>
+
+  <section>
+    <label>Top Fixes</label>
+    <ol class="fix-list" id="fix-list"></ol>
+  </section>
+</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const CATEGORIES = [
+  { key: 'impact_and_quantification', label: 'Impact & Quantification', max: 25, color: '#4f46e5' },
+  { key: 'technical_depth', label: 'Technical Depth & Relevance', max: 20, color: '#7c3aed' },
+  { key: 'relevant_experience', label: 'Relevant Experience', max: 15, color: '#2563eb' },
+  { key: 'clarity_and_concision', label: 'Clarity & Concision', max: 10, color: '#0891b2' },
+  { key: 'formatting_ats', label: 'Formatting & ATS-Friendliness', max: 10, color: '#059669' },
+  { key: 'skills_accuracy', label: 'Skills Section Accuracy', max: 10, color: '#d97706' },
+  { key: 'education_presentation', label: 'Education Presentation', max: 5, color: '#dc2626' },
+  { key: 'polish_red_flags', label: 'Overall Polish / Red Flags', max: 5, color: '#e11d48' },
+];
+
+const SYSTEM_PROMPT = `# SWE/Engineering Internship Resume Reviewer — AI Prompt Spec
+
+You are a rigorous, no-fluff technical recruiter and resume screener for Software Engineering / Engineering internship positions at competitive tech companies (FAANG-adjacent, well-funded startups, mainstream internship pipelines). You have personally screened tens of thousands of resumes for SWE internships.
+
+Your job is to evaluate the candidate's resume honestly and critically. Do not be encouraging for the sake of being nice. Do not inflate scores.
+
+## Inputs
+1. Resume text: {resume}
+2. Has referral: {referral}
+3. Job description (optional): {jd}
+
+## Output — Return ONLY this exact JSON, no markdown wrapping:
+{
+  "overall_score": <int out of 100>,
+  "subscores": {
+    "impact_and_quantification": <int out of 25>,
+    "technical_depth": <int out of 20>,
+    "relevant_experience": <int out of 15>,
+    "clarity_and_concision": <int out of 10>,
+    "formatting_ats": <int out of 10>,
+    "skills_accuracy": <int out of 10>,
+    "education_presentation": <int out of 5>,
+    "polish_red_flags": <int out of 5>
+  },
+  "interview_likelihood": {
+    "without_referral": "<percent string like '35%'>",
+    "with_referral": "<percent string>",
+    "reasoning": "<2-3 sentence reasoning>"
+  },
+  "jd_feedback": {
+    "missing_skills": ["<tech>", ...] or null,
+    "expected_grad_year": "<string or null>",
+    "candidate_grad_year_match": <bool or null>,
+    "alignment_gaps": ["<gap>", ...] or null
+  },
+  "top_fixes": ["<specific fix>", ...]
+}`;
+
+let referralOn = false;
+let resumeText = '';
+
+// Provider selector UI
+const providerSelect = document.getElementById('provider-select');
+const providerConfig = document.getElementById('provider-config');
+const ANTHROPIC_KEY_STORAGE_KEY = 'reviewer_anthropic_key';
+const OPENAI_KEY_STORAGE_KEY = 'reviewer_openai_key';
+
+function getStoredKey(key) {
+  try { return localStorage.getItem(key) || ''; } catch { return ''; }
+}
+function setStoredKey(key, val) {
+  try { localStorage.setItem(key, val); } catch {}
+}
+
+function renderProviderConfig() {
+  const p = providerSelect.value;
+  if (p === 'ollama') {
+    providerConfig.innerHTML = `<p class="hint" style="margin-top:.3rem">Runs locally — no API key needed. Pull a model first: <code>ollama pull &lt;model&gt;</code></p>`;
+  } else if (p === 'anthropic') {
+    providerConfig.innerHTML = `
+      <input type="password" id="api-key-input" placeholder="sk-ant-api03-... (key stored in browser localStorage)" value="${getStoredKey(ANTHROPIC_KEY_STORAGE_KEY)}">
+      <p class="hint" style="margin-top:.3rem">Uses Claude Sonnet / Opus via https://api.anthropic.com/v1/messages</p>`;
+    document.getElementById('api-key-input').addEventListener('input', e => setStoredKey(ANTHROPIC_KEY_STORAGE_KEY, e.target.value));
+  } else {
+    providerConfig.innerHTML = `
+      <input type="password" id="api-key-input" placeholder="sk-proj-... (key stored in browser localStorage)" value="${getStoredKey(OPENAI_KEY_STORAGE_KEY)}">
+      <p class="hint" style="margin-top:.3rem">Uses gpt-4o-mini via https://api.openai.com/v1/chat/completions</p>`;
+    document.getElementById('api-key-input').addEventListener('input', e => setStoredKey(OPENAI_KEY_STORAGE_KEY, e.target.value));
+  }
+}
+
+providerSelect.addEventListener('change', renderProviderConfig);
+renderProviderConfig(); // initial render
+
+// Referral toggle
+const toggle = document.getElementById('referral-toggle');
+const rLabel = document.getElementById('referral-label');
+toggle.addEventListener('click', () => {
+  referralOn = !referralOn;
+  toggle.classList.toggle('on', referralOn);
+  toggle.setAttribute('aria-checked', referralOn);
+  rLabel.textContent = referralOn ? 'Has referral' : 'No referral';
+});
+toggle.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle.click(); }});
+
+// File upload
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+
+async function handleFile(file) {
+  const nameEl = document.getElementById('file-name');
+  try {
+    if (file.name.endsWith('.pdf')) resumeText = await parsePDF(file);
+    else if (file.name.endsWith('.docx')) resumeText = await parseDOCX(file);
+    else resumeText = await file.text();
+    nameEl.textContent = `✓ ${file.name}`;
+  } catch (err) {
+    nameEl.textContent = `✗ Parse error: ${err.message}`;
+  }
+}
+
+async function parsePDF(file) {
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+  let text = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    text += content.items.map(s => s.str).join(' ') + '\n';
+  }
+  return text;
+}
+
+async function parseDOCX(file) {
+  const buf = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({ arrayBuffer: buf });
+  return result.value;
+}
+
+// Submit
+document.getElementById('submit-btn').addEventListener('click', runReview);
+
+async function runReview() {
+  const pasteText = document.getElementById('resume-paste').value.trim();
+  if (!resumeText && !pasteText) { showError('Please paste resume text or upload a file.'); return; }
+  const fullResume = (pasteText + '\n' + resumeText).trim();
+  const jd = document.getElementById('jd-text').value.trim();
+
+  const loadingEl = document.getElementById('loading');
+  const errorEl = document.getElementById('error-box');
+  const submitBtn = document.getElementById('submit-btn');
+  const resultsEl = document.getElementById('results');
+  loadingEl.classList.add('visible');
+  errorEl.classList.remove('visible');
+  resultsEl.classList.remove('visible');
+  submitBtn.disabled = true;
+
+  try {
+    const prompt = SYSTEM_PROMPT.replace('{resume}', fullResume).replace('{referral}', String(referralOn)).replace('{jd}', jd || 'None provided.');
+    const provider = providerSelect.value;
+    let raw;
+
+    if (provider === 'ollama') {
+      // ── Ollama (local) ──────────────────────────────────────
+      const res = await fetch('http://localhost:11434/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: 'gpt-oss:20b', messages: [
+          { role: 'system', content: prompt },
+          { role: 'user', content: 'Review this resume and output the JSON.' }
+        ], stream: false }),
+      });
+      if (!res.ok) throw new Error(`Ollama API error ${res.status}`);
+      const data = await res.json();
+      raw = data.message?.content || '';
+
+    } else if (provider === 'anthropic') {
+      // ── Anthropic API ───────────────────────────────────────
+      const apiKey = localStorage.getItem(ANTHROPIC_KEY_STORAGE_KEY);
+      if (!apiKey) throw new Error('Anthropic API key not set. Enter it in the Provider config below.');
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 4096,
+          system: prompt,
+          messages: [{ role: 'user', content: 'Review this resume and output the JSON.' }],
+        }),
+      });
+      if (!res.ok) { const e = await res.text(); throw new Error(`Anthropic API error ${res.status}: ${e}`); }
+      const data = await res.json();
+      raw = (data.content || [])[0]?.text || '';
+
+    } else if (provider === 'openai') {
+      // ── OpenAI API (ChatGPT) ────────────────────────────────
+      const apiKey = localStorage.getItem(OPENAI_KEY_STORAGE_KEY);
+      if (!apiKey) throw new Error('OpenAI API key not set. Enter it in the Provider config below.');
+      const res = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            { role: 'system', content: prompt },
+            { role: 'user', content: 'Review this resume and output the JSON.' }
+          ],
+        }),
+      });
+      if (!res.ok) { const e = await res.text(); throw new Error(`OpenAI API error ${res.status}: ${e}`); }
+      const data = await res.json();
+      raw = data.choices?.[0]?.message?.content || '';
+    }
+
+    // ── Parse JSON from model output (strip prose/code fences) ─
+    raw = raw.replace(/```(?:json)?\s*/g, '').replace(/```\s*$/g, '').trim();
+    const braceIdx = raw.indexOf('{');
+    if (braceIdx > 0) raw = raw.slice(braceIdx);
+
+    const result = JSON.parse(raw);
+    renderResults(result, !!jd);
+  } catch (err) {
+    showError(err.message + '. Check the console for details.');
+  } finally {
+    loadingEl.classList.remove('visible');
+    submitBtn.disabled = false;
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-box');
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+
+function renderResults(result, hasJD) {
+  document.getElementById('overall-score').textContent = result.overall_score ?? '—';
+
+  const barsEl = document.getElementById('sub-bars');
+  barsEl.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const val = result.subscores?.[cat.key] ?? null;
+    if (val === null) return;
+    const pct = Math.min((val / cat.max) * 100, 100);
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `
+      <div class="bar-label"><span>${cat.label}</span><span>${val} / ${cat.max}</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${cat.color}"></div></div>`;
+    barsEl.appendChild(row);
+  });
+
+  const lk = result.interview_likelihood || {};
+  document.getElementById('likelihood-content').innerHTML = `
+    Without referral: <strong>${lk.without_referral || '—'}</strong><br>
+    With referral: <strong>${lk.with_referral || '—'}</strong>
+    <p class="reasoning">${lk.reasoning || ''}</p>`;
+
+  if (hasJD && result.jd_feedback) {
+    const jdSec = document.getElementById('jd-section');
+    jdSec.style.display = '';
+    const jdContent = document.getElementById('jd-content');
+    let jdHTML = '';
+    if (result.jd_feedback.missing_skills?.length) {
+      jdHTML += '<p><strong>Missing skills:</strong></p><div class="tag-list">';
+      result.jd_feedback.missing_skills.forEach(s => { jdHTML += `<span class="tag">${esc(s)}</span>`; });
+      jdHTML += '</div>';
+    }
+    if (result.jd_feedback.expected_grad_year) {
+      jdHTML += `<p><strong>Expected grad year:</strong> ${esc(result.jd_feedback.expected_grad_year)}</p>`;
+      jdHTML += `<p><strong>Candidate match:</strong> ${result.jd_feedback.candidate_grad_year_match ? 'Yes' : 'No'}</p>`;
+    }
+    if (result.jd_feedback.alignment_gaps?.length) {
+      jdHTML += '<p style="margin-top:.5rem"><strong>Alignment gaps:</strong></p><ul style="padding-left:1.25rem;font-size:.9rem">';
+      result.jd_feedback.alignment_gaps.forEach(g => { jdHTML += `<li>${esc(g)}</li>`; });
+      jdHTML += '</ul>';
+    }
+    jdContent.innerHTML = jdHTML;
+  }
+
+  const fixList = document.getElementById('fix-list');
+  fixList.innerHTML = '';
+  (result.top_fixes || []).forEach(f => {
+    const li = document.createElement('li');
+    li.textContent = f;
+    fixList.appendChild(li);
+  });
+
+  document.getElementById('results').classList.add('visible');
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+</script>
+</body>
+</html>

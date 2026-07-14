@@ -1,0 +1,44 @@
+- generic [active] [ref=e1]:
+  - heading "SWE Internship Resume Reviewer" [level=1] [ref=e2]
+  - paragraph [ref=e3]: Paste your resume or upload a file. Get a rigorous, recruiter-style score.
+  - generic [ref=e4]:
+    - generic [ref=e5]: Resume (paste text)
+    - textbox "Resume (paste text)" [ref=e6]:
+      - /placeholder: Paste your resume content here...
+  - generic [ref=e7]:
+    - generic [ref=e8]: Or upload a file
+    - paragraph [ref=e10] [cursor=pointer]: Click to browse or drag & drop — PDF, DOCX, TXT
+    - paragraph [ref=e21]: ✓ Resume.pdf
+  - generic [ref=e11]:
+    - generic [ref=e12]: Job Description (optional)
+    - textbox "Job Description (optional)" [ref=e13]:
+      - /placeholder: Paste the job description here to get keyword-gap feedback...
+  - generic [ref=e14]:
+    - generic [ref=e15]: Referral
+    - generic [ref=e16]:
+      - switch [ref=e17] [cursor=pointer]
+      - generic [ref=e18]: No referral
+  - button "Review Resume" [ref=e19] [cursor=pointer]
+  - text: Analyzing resume…
+  - paragraph
+  - generic [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - generic [ref=e26]: "48"
+        - generic [ref=e27]: / 100
+      - generic [ref=e28]:
+        - strong [ref=e29]: Interview Likelihood
+        - generic [ref=e30]:
+          - text: "Without referral:"
+          - strong [ref=e31]: 25%
+          - text: "With referral:"
+          - strong [ref=e32]: 35%
+          - paragraph [ref=e33]: The resume demonstrates some relevant technical experience and quantified achievements, but suffers from significant formatting, consistency, and clarity issues that could deter recruiters. A referral would modestly boost confidence in the candidate.
+    - generic [ref=e34]:
+      - generic [ref=e35]: Top Fixes
+      - list [ref=e36]:
+        - listitem [ref=e37]: Reformat the resume into a clean, ATS‑friendly template with clear section headings and consistent bullet style.
+        - listitem [ref=e38]: Correct all typos and date formats (e.g., graduation year should read 2028).
+        - listitem [ref=e39]: Remove or consolidate irrelevant skills (taxing, network security tools) to focus on core SWE stack.
+        - listitem [ref=e40]: Rewrite action verbs in past tense for completed roles and present tense for ongoing positions.
+        - listitem [ref=e41]: Add a GPA and/or academic honors if applicable; include a concise summary of technical achievements at the top.
