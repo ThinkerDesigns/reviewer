@@ -79,8 +79,8 @@ You need one of the following backend providers configured:
 
 1. Clone or download this repository:
    ```sh
-   git clone https://github.com/<your_username>/resume-reviewer.git
-   cd resume-reviewer
+   git clone https://github.com/ThinkerDesigns/reviewer.git
+   cd reviewer
    ```
 
 2. Start a static server from the project directory:
@@ -172,7 +172,7 @@ if (PROVIDER === 'ollama') {
 - [ ] Save/review history (in-browser localStorage)
 - [ ] Dark mode
 
-See the [open issues](https://github.com/your_username/resume-reviewer/issues) for a full list of proposed features.
+See the [open issues](https://github.com/ThinkerDesigns/reviewer/issues) for a full list of proposed features.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -186,9 +186,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name — [@your_twitter](https://twitter.com/your_username) — email@example.com
+Dhruv Bhadauriya — bhadauriya@ucdavis.edu
 
-Project Link: [https://github.com/your_username/resume-reviewer](https://github.com/your_username/resume-reviewer)
+Project Link: [https://github.com/ThinkerDesigns/reviewer](https://github.com/ThinkerDesigns/reviewer)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -203,13 +203,13 @@ Project Link: [https://github.com/your_username/resume-reviewer](https://github.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
-[contributors-shield]: https://img.shields.io/github/contributors/your_username/resume-reviewer.svg?style=for-the-badge
-[contributors-url]: https://github.com/your_username/resume-reviewer/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/your_username/resume-reviewer.svg?style=for-the-badge
-[forks-url]: https://github.com/your_username/resume-reviewer/network/members
-[stars-shield]: https://img.shields.io/github/stars/your_username/resume-reviewer.svg?style=for-the-badge
-[stars-url]: https://github.com/your_username/resume-reviewer/stargazers
-[issues-shield]: https://img.shields.io/github/issues/your_username/resume-reviewer.svg?style=for-the-badge
-[issues-url]: https://github.com/your_username/resume-reviewer/issues
+[contributors-shield]: https://img.shields.io/github/contributors/ThinkerDesigns/reviewer.svg?style=for-the-badge
+[contributors-url]: https://github.com/ThinkerDesigns/reviewer/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/ThinkerDesigns/reviewer.svg?style=for-the-badge
+[forks-url]: https://github.com/ThinkerDesigns/reviewer/network/members
+[stars-shield]: https://img.shields.io/github/stars/ThinkerDesigns/reviewer.svg?style=for-the-badge
+[stars-url]: https://github.com/ThinkerDesigns/reviewer/stargazers
+[issues-shield]: https://img.shields.io/github/issues/ThinkerDesigns/reviewer.svg?style=for-the-badge
+[issues-url]: https://github.com/ThinkerDesigns/reviewer/issues
 [license-shield]: https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge
 [license-url]: https://opensource.org/licenses/MIT
